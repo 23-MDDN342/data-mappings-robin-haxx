@@ -81,15 +81,10 @@ function Face() {
     fill( this.eyebrowColour);
     stroke( this.eyebrowColour);
     strokeWeight(0.02);
-    let anim_mod = 0;
-    while(anim_mod <= 0.1){
-      anim_mod += 0.01;
-    }
-    if(anim_mod.mod == 1){
-      anim_mod = 0;
-    }
-    this.draw_segment(positions.left_eyebrow, 0.1+anim_mod);
-    this.draw_segment(positions.left_eyebrow, -0.1+anim_mod);
+
+    this.draw_segment(positions.left_eyebrow, 0.1);
+    positions.right_eyebrow[2][1] += 0.2;
+    this.draw_segment(positions.left_eyebrow, -0.1);
     this.draw_segment(positions.right_eyebrow, 0.1);
     this.draw_segment(positions.right_eyebrow, -0.1);
 
