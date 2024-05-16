@@ -67,7 +67,7 @@ function Face() {
     strokeWeight(.01);
     noFill();
     //fill(this.mainColour);
-    for (let i=0; i<100; i++){
+    for (let i=0; i<50; i++){
       ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4-(i*.1));
     }
     noStroke();
@@ -75,7 +75,16 @@ function Face() {
 
     // mouth
     fill(this.detailColour);
-    ellipse(segment_average(positions.bottom_lip)[0], segment_average(positions.bottom_lip)[1], 1.36, 0.25 * this.mouth_size);
+    //ellipse(segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1], 1.36, 0.25 * this.mouth_size);
+    push();
+    translate(segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1]);
+    bezier( 0,0,
+            1,positions.top_lip[3][1],
+            1,positions.bottom_lip[3][1],
+            0,0);
+    pop();
+    segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1];
+    //ellipse(segment_average(positions.bottom_lip)[0], segment_average(positions.bottom_lip)[1], 1.36, 0.25 * this.mouth_size);
 
     // eyebrows
     fill( this.eyebrowColour);
@@ -158,6 +167,7 @@ function Face() {
           line(px, py+ y_mod, nx, ny + y_mod);
           console.log(px)
           
+
           
         }
         else if(do_loop) {
