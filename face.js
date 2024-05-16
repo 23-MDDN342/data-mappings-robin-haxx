@@ -74,14 +74,46 @@ function Face() {
 
 
     // mouth
-    fill(this.detailColour);
+    let largerMouth = this.mouth_size * 1.7;
+    let mouthInner = largerMouth * 0.9;
     //ellipse(segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1], 1.36, 0.25 * this.mouth_size);
     push();
     translate(segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1]);
+    translate (-largerMouth *.5, 0);
+    let topLipMidY = positions.top_lip[4][1]
+    let btmLipMidY = positions.bottom_lip[4][1]
+    let diff = topLipMidY - btmLipMidY;
+
+    fill(200,200);
+
+    bezier (0,0,
+      largerMouth*.2,-1.5,
+      largerMouth*.8,-1.5,
+      largerMouth,0
+    );
+
+    bezier (0,0,
+      largerMouth*.2,1.5,
+      largerMouth*.8,1.5,
+      largerMouth,0
+    );
+    translate (0.5*(largerMouth - mouthInner), 0); // centers inner mouth region
+    fill(this.detailColour);
     bezier( 0,0,
-            1,positions.top_lip[3][1],
-            1,positions.bottom_lip[3][1],
-            0,0);
+
+      mouthInner*.3,topLipMidY + (1.5*diff),
+      mouthInner*.7,topLipMidY + (1.5*diff),
+            // math for difference between top and bottom lip y
+
+            mouthInner,0);
+
+    bezier( 0,0,
+
+      mouthInner*.3,0 - (diff),
+      mouthInner*.7,0 - (diff),
+            // math for difference between top and bottom lip y
+
+            mouthInner,0);
     pop();
     segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1];
     //ellipse(segment_average(positions.bottom_lip)[0], segment_average(positions.bottom_lip)[1], 1.36, 0.25 * this.mouth_size);
