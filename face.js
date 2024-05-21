@@ -27,6 +27,8 @@ const supalpineCol =   [178, 46, 255];
 const allHabitatsCol = [250, 96, 252];
 const neutralCol =     [226, 234, 229];
 
+const drawHuman = false;// draws human mouth and nose elements 
+
 // example of a global function
 // given a segment, this returns the average point [x, y]
 function segment_average(segment) {
@@ -68,7 +70,13 @@ function Face() {
     noFill();
     //fill(this.mainColour);
     for (let i=0; i<50; i++){
+      strokeWeight(.1);
       ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4-(i*.1));
+      push();
+      stroke(this.detailColour);
+      strokeWeight(.01);
+      ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4-(i*.1));
+      pop();
     }
     noStroke();
 
@@ -86,34 +94,34 @@ function Face() {
 
     fill(200,200);
 
-    bezier (0,0,
+    bezier (-1,0,
       largerMouth*.2,-1.5,
       largerMouth*.8,-1.5,
-      largerMouth,0
+      1+largerMouth,0
     );
 
-    bezier (0,0,
+    bezier (-1,0,
       largerMouth*.2,1.5,
       largerMouth*.8,1.5,
-      largerMouth,0
+      1+largerMouth,0
     );
     translate (0.5*(largerMouth - mouthInner), 0); // centers inner mouth region
     fill(this.detailColour);
-    bezier( 0,0,
+    bezier( -1,0,
 
       mouthInner*.3,topLipMidY + (1.5*diff),
       mouthInner*.7,topLipMidY + (1.5*diff),
             // math for difference between top and bottom lip y
 
-            mouthInner,0);
+            1+mouthInner,0);
 
-    bezier( 0,0,
+    bezier( -1,0,
 
       mouthInner*.3,0 - (diff),
       mouthInner*.7,0 - (diff),
             // math for difference between top and bottom lip y
 
-            mouthInner,0);
+            1+mouthInner,0);
     pop();
     segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1];
     //ellipse(segment_average(positions.bottom_lip)[0], segment_average(positions.bottom_lip)[1], 1.36, 0.25 * this.mouth_size);
@@ -121,31 +129,39 @@ function Face() {
     // eyebrows
     fill( this.eyebrowColour);
     stroke( this.eyebrowColour);
-    strokeWeight(0.02);
+    strokeWeight(0.04);
 
-    this.draw_segment(positions.left_eyebrow, 0.1);
-    positions.right_eyebrow[2][1] += 0.2;
-    this.draw_segment(positions.left_eyebrow, -0.1);
+
+    this.draw_segment(positions.left_eyebrow, 0.1 + diff*.15);
+    this.draw_segment(positions.left_eyebrow, -0.1 + diff*.25);
+
+    positions.right_eyebrow[2][1] += diff*.3;
     this.draw_segment(positions.right_eyebrow, 0.1);
     this.draw_segment(positions.right_eyebrow, -0.1);
 
     // draw the chin segment using points
     fill(this.chinColour);
     stroke(this.chinColour);
-    this.draw_segment(positions.chin);
-
+    if (drawHuman == true){
+      this.draw_segment(positions.chin);
+    }
     fill(bothIslandsCol);
     stroke(dryForestCol);
+    strokeWeight(0.01);
     this.draw_segment(positions.nose_bridge);
-    this.draw_segment(positions.nose_tip);
 
+    if (drawHuman == true){
+      
+      this.draw_segment(positions.nose_tip);
+  }
     strokeWeight(0.03);
 
     fill(this.lipColour);
     stroke(this.lipColour);
-    this.draw_segment(positions.top_lip);
-
-    this.draw_segment(positions.bottom_lip);
+    if (drawHuman == true){
+      this.draw_segment(positions.top_lip);
+      this.draw_segment(positions.bottom_lip);
+  }
 
     let left_eye_pos = segment_average(positions.left_eye);
     let right_eye_pos = segment_average(positions.right_eye);
@@ -158,8 +174,19 @@ function Face() {
       noFill();
       stroke
       for(let i = 0; i < 10; i++){
-        ellipse(left_eye_pos[0], left_eye_pos[1], 1-(i*.1), 1/i);
-        ellipse(right_eye_pos[0], right_eye_pos[1], 1-(i*.1), 0.33);
+        push();
+          stroke(stroke_color);
+          strokeWeight(0.15);
+          ellipse(left_eye_pos[0], left_eye_pos[1], 1-(i*.1), 0.33);
+          ellipse(right_eye_pos[0], right_eye_pos[1], 1-(i*.1), 0.33);
+        pop();  
+        push();
+          //stroke(stroke_color);
+          strokeWeight(0.06);
+          ellipse(left_eye_pos[0], left_eye_pos[1], 0.4-(i*.15), 0.5);
+          ellipse(right_eye_pos[0], right_eye_pos[1], 0.4-(i*.15), 0.5);
+        pop();
+        
       }
       
       
@@ -173,10 +200,11 @@ function Face() {
       let eyePosY = (left_eye_pos[1] + right_eye_pos[1]) / 2;
 
       fill(this.detailColour);
-      ellipse(eyePosX, eyePosY, 0.45, 0.27);
+       ellipse(eyePosX, eyePosY, 0.45, 0.27);
 
       fill(this.mainColour);
       ellipse(eyePosX - 0.1 + curEyeShift, eyePosY, 0.18);
+
     }
    // fill(0)
    //ellipse(0,0, 0.5,0.5) center point
