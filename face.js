@@ -16,15 +16,18 @@ const supalpineCol =   [178, 46, 255];
 const allHabitatsCol = [250, 96, 252];
 
 const neutralCol =     [226, 234, 229];
-const beakColour = [200,180,140,200];
+const beakColour = [200,180,140];
+const beakTakahe = [240,110,120];
 const stroke_color = [95, 52, 8];
+const beakColourAlpha = [...beakColour, 200]
 
 const drawHuman = false;// draws human mouth and nose elements 
 
-ellipseMode(CENTER);
+
 
 // This where you define your own face object
 function Face() {
+  ellipseMode(CENTER);
   // these are state variables for a face
   // (your variables should be different!)
   this.detailColour = dryForestCol;
@@ -63,47 +66,214 @@ function Face() {
   // DRAWING SUBFUNCTIONS
 
   this.drawHead = function(birdSpecies, positions){
-    switch(birdSpecies){
-      case 0:
+    push();
+        switch(birdSpecies){
+        //  HEAD: MOA
+          case 0:
       
-      // HEAD SHAPE
-      stroke(stroke_color);
-      strokeWeight(.01);
-      noFill();
-      for (let i=0; i<50; i++){
-        strokeWeight(.1);
-        ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4-(i*.1));
-        push();
-        stroke(this.detailColour);
-        strokeWeight(.01);
-        ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4+-(i*.1));
-        pop();
-      };
-      
-      break;
-      default: //debug texture
-      debugOut("Head");
+            stroke(stroke_color);
+            noFill();
 
-    }
+            for (let i=0; i<50; i++){
+              strokeWeight(.1);
+              ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4-(i*.1));
+              push();
+                stroke(this.detailColour);
+                strokeWeight(.01);
+                ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4+-(i*.1));
+              pop();
+            };      
+          break;
+        //  HEAD: EAGLE
+          case 1:
+            stroke(stroke_color);
+            noFill();
+
+            for(let i = 0; i < 50; i++){
+              strokeWeight(.05);
+              //ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4-(i*.1));
+              beginShape();
+              curveVertex(-(i/25),-(i/25));
+              curveVertex(-(i/33.5),-(i/20));
+              curveVertex((i/33.5),-(i/20));
+              curveVertex(0,-(i/20));
+              curveVertex((i/25),-(i/25));
+              curveVertex((i/33.5),(i/50));
+              curveVertex(0,(i/20));
+              curveVertex(-(i/33.5),(i/50));
+              endShape(CLOSE);
+              push();
+                stroke(this.detailColour);
+                strokeWeight(.001);
+                //ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4+-(i*.1));
+                beginShape();
+                curveVertex(-(i/25),-(i/25));
+                curveVertex(-(i/33.5),-(i/20));
+                curveVertex((i/33.5),-(i/20));
+                curveVertex(0,-(i/20));
+                curveVertex((i/25),-(i/25));
+                curveVertex((i/33.5),(i/50));
+                curveVertex(0,(i/20));
+                curveVertex(-(i/33.5),(i/50));  
+                endShape(CLOSE);
+              pop();
+            }
+          break;
+        //  HEAD: Takahe  
+          case 2:
+          stroke(wetForestCol);
+          noFill();
+          strokeWeight(.02);
+          for(let i = 0; i < 60; i++){
+            beginShape();
+              curveVertex(0,.02*i);
+              curveVertex(0,.02*i);
+              curveVertex(-.025*i,.025*i);
+              curveVertex(-.0375*i,0);
+              curveVertex(-0.0175*i,-.0375*i);
+              curveVertex(0.0175*i,-.0375*i);
+              curveVertex(.0375*i,0);
+              curveVertex(.025*i,.025*i);
+              curveVertex(0,.02*i);
+            endShape(CLOSE);
+            push();
+              stroke(this.detailColour);
+              strokeWeight(.005);
+              beginShape();
+                curveVertex(0,.02*i);
+                curveVertex(0,.02*i);
+                curveVertex(-.025*i,.025*i);
+                curveVertex(-.0375*i,0);
+                curveVertex(-0.0175*i,-.0375*i);
+                curveVertex(0.0175*i,-.0375*i);
+                curveVertex(.0375*i,0);
+                curveVertex(.025*i,.025*i);
+                curveVertex(0,.02*i);
+              endShape(CLOSE);
+            pop();
+          }
+          break;
+        //  HEAD: TUI  
+          case 3:
+            stroke(northIslandCol);
+            noFill();
+            strokeWeight(0.04);
+            translate(0,-1.5);
+            for(let i = 0; i < 60; i++){
+              beginShape();
+                curveVertex(0,i*.05);
+                curveVertex(0,i*.05);
+                curveVertex(i*.0125,i*.045);
+                curveVertex(i*.02,i*.045);
+                curveVertex(i*.025,i*.04);
+                curveVertex(i*.045,i*.0325);
+                curveVertex(i*.0325,i*.015);
+                curveVertex(i*.0175,i*.005);
+                curveVertex(i*.0125,-i*.005);
+                curveVertex(-i*.0125,-i*.005);
+                curveVertex(-i*.0175,i*.005);
+                curveVertex(-i*.0325,i*.015);
+                curveVertex(-i*.045,i*.0325);
+                curveVertex(-i*.025,i*.04);
+                curveVertex(-i*.02,i*.0375);
+                curveVertex(-i*.0125,i*.045);
+                curveVertex(0,i*.05);
+              endShape(CLOSE);
+              push();
+              stroke(wetForestCol);
+              strokeWeight(0.005);
+                beginShape();
+                  curveVertex(0,i*.05);
+                  curveVertex(0,i*.05);
+                  curveVertex(i*.0125,i*.045);
+                  curveVertex(i*.02,i*.045);
+                  curveVertex(i*.025,i*.04);
+                  curveVertex(i*.045,i*.0325);
+                  curveVertex(i*.0325,i*.015);
+                  curveVertex(i*.0175,i*.005);
+                  curveVertex(i*.0125,-i*.005);
+                  curveVertex(-i*.0125,-i*.005);
+                  curveVertex(-i*.0175,i*.005);
+                  curveVertex(-i*.0325,i*.015);
+                  curveVertex(-i*.045,i*.0325);
+                  curveVertex(-i*.025,i*.04);
+                  curveVertex(-i*.02,i*.0375);
+                  curveVertex(-i*.0125,i*.045);
+                  curveVertex(0,i*.05);
+                endShape(CLOSE);
+
+
+              pop();
+
+              
+            }
+            push();
+            stroke(neutralCol);
+            strokeWeight(0.01);
+            translate(-.9,.3);
+            rotate(HALF_PI);
+            for(let i = 0; i < .4; i+=.1){
+                for (let j=0; j < .8; j+=.1){
+                //rotate(PI * j * 4);  
+                translate(j*.07,0);
+                translate(0,j*.1);
+                push();
+                rotate(-TWO_PI);
+                rotate(PI * random(5,20)); 
+                  curve(-.5+i,-.5+j,
+                        -.15+i,0+j,
+                        .15+i,0+j,
+                        .5+i,-.5+j
+                  );
+                  pop();
+              }
+            }
+            pop();
+            push();
+            stroke(neutralCol);
+            strokeWeight(0.01);
+            translate(.9,.3);
+            rotate(-HALF_PI);
+            for(let i = 0; i < .4; i+=.1){
+                for (let j=0; j < .8; j+=.1){
+                //rotate(PI * j * 4);  
+                translate(-j*.07,0);
+                translate(0,j*.14);
+                push();
+                rotate(-TWO_PI);
+                rotate(PI * random(210,230)); 
+                  curve(-.5+i,-.5+j,
+                        -.15+i,0+j,
+                        .15+i,0+j,
+                        .5+i,-.5+j
+                  );
+                  pop();
+              }
+            }
+            pop();
+          break;
+          default: //debug texture
+          debugOut("Head");
+
+        }
+    pop();
   }
 
 
 
 
   this.drawBeak = function(birdSpecies, positions,topLipMidY,btmLipMidY,diff){
-          // BEAK
-          switch(birdSpecies){
-            case 0:
-          let largerMouth = this.mouth_size * 1.7;
-          let mouthInner = largerMouth * 0.9;
+    let largerMouth = this.mouth_size * 1.7;
+    let mouthInner = largerMouth * 0.9;
+    push();
+        switch(birdSpecies){
+        //  BEAK: MOA  
+          case 0:
     
-          push();
             translate(segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1]);
             translate (-largerMouth *.5, 0);
-    
-            noStroke();
-            fill(beakColour);
-            // Outer "beak"
+
+            fill(beakColourAlpha);
             bezier (-1,0,
               largerMouth*.2,-1.5,
               largerMouth*.8,-1.5,
@@ -114,85 +284,360 @@ function Face() {
               largerMouth*.8,1.5,
               1+largerMouth,0
             );
+
+
+            fill(this.detailColour);
+            stroke(beakColourAlpha);
+            strokeWeight(.05);
+            
+            beginShape();
+            curveVertex(-1,0);
+            curveVertex(-1,0);
+            curveVertex(-.5+(largerMouth*.1),-.1);
+            curveVertex((largerMouth*.5), .5);
+            curveVertex(.5+(largerMouth*.9), -.1);
+            curveVertex(1+largerMouth,0);
+            curveVertex(1+largerMouth,0);
+            curveVertex(.5+(largerMouth*.9), -.3-(diff*.7));
+            curveVertex((largerMouth*.5), .3-(diff*.7));
+            curveVertex(-.5+(largerMouth*.1),-.3-(diff*.7));
+            curveVertex(-1,0);
+            endShape(CLOSE);
+
             translate (0.5*(largerMouth - mouthInner), 0); // centers inner mouth region
             fill(this.detailColour);
-            // Inner "mouth"
-            bezier
-                  ( -1,0,
-                    mouthInner*.3,topLipMidY + (1.5*diff),
-                    mouthInner*.7,topLipMidY + (1.5*diff),
-                    1+mouthInner,0
-                  );
-            bezier
-                  ( -1,0,
-                    mouthInner*.3,0 - (diff),
-                    mouthInner*.7,0 - (diff),
-                    1+mouthInner,0
-                  );
-    
+
+            // );
+            break;
+            case 1:
+          //  BEAK: EAGLE
+          push();
+          translate(segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1]);
+          translate (-largerMouth *.5, 0);
+          fill(beakColourAlpha);
+          bezier (-.5,0,
+            largerMouth*.2,-1.5,
+            largerMouth*.8,-1.5,
+            .5+largerMouth,0
+          );
+          bezier (-.5,0,
+            largerMouth*.2,1.5,
+            largerMouth*.8,1.5,
+            .5+largerMouth,0
+          );
+          
+
+          fill(this.detailColour);
+          stroke(beakColourAlpha);
+          strokeWeight(.05);
+          
+          beginShape();
+            curveVertex(-.45,0);
+            curveVertex(-.45,0);
+            curveVertex(-.2+(largerMouth*.1),-.1);
+            curveVertex((largerMouth*.5), .5);
+            curveVertex(.2+(largerMouth*.9), -.1);
+            curveVertex(.45+largerMouth,0);
+            curveVertex(.45+largerMouth,0);
+            curveVertex(.2+(largerMouth*.9), -.3-(diff*.9));
+            curveVertex((largerMouth*.5), .3-(diff*.9));
+            curveVertex(-.2+(largerMouth*.1),-.3-(diff*.9));
+            curveVertex(-.45,0);
+          endShape(CLOSE);
           pop();
 
+          fill(northIslandCol);
+          beginShape();
+            curveVertex(0,1.7);
+            curveVertex(0,1.7);
+            curveVertex(-.5,1);
+            curveVertex(-.5,-.7);
+            curveVertex(0,-1);
+            curveVertex(.5, -.7);
+            curveVertex(.5,1);
+          
+          endShape(CLOSE);
+
+            break;
+          //  BEAK: Takahe  
+            case 2:
+            push();
+            translate(segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1]);
+            translate (-largerMouth *.5, 0);
+            fill(beakTakahe);
+            bezier (-.5,0,
+              largerMouth*.2,-3,
+              largerMouth*.8,-3,
+              .5+largerMouth,0
+            );
+            bezier (-.5,0,
+              largerMouth*.2,.5,
+              largerMouth*.8,.5,
+              .5+largerMouth,0
+            );
+            fill(this.detailColour);
+            stroke(beakColourAlpha);
+            strokeWeight(.05);
+            translate(0,-1);
+            beginShape();
+              curveVertex(-.15,0);
+              curveVertex(-.15,0);
+              curveVertex(+(largerMouth*.1),-.1);
+              curveVertex((largerMouth*.5), 1.5);
+              curveVertex(+(largerMouth*.9), -.1);
+              curveVertex(.15+largerMouth,0);
+              curveVertex(.15+largerMouth,0);
+              curveVertex(+(largerMouth*.9), -.3-(diff*.9));
+              curveVertex((largerMouth*.5), 1.3-(diff*.9));
+              curveVertex(+(largerMouth*.1),-.3-(diff*.9));
+              curveVertex(-.15,0);
+            endShape(CLOSE);
+            pop();
+            fill(beakTakahe);
+            stroke(northIslandCol);
+            translate(0,-.6);
+            beginShape();
+              curveVertex(0,2);
+              curveVertex(0,2);
+              curveVertex(0.1,1.8);
+              curveVertex(0.3,0.3);
+              curveVertex(1.4,-1.0);
+              curveVertex(1.1,-1.3);
+              curveVertex(0,-1.5);
+              curveVertex(-1.1,-1.3);
+              curveVertex(-1.4,-1.0);
+              curveVertex(-0.3,0.3);
+              curveVertex(-0.1,1.8);
+              curveVertex(0,2);
+            endShape(CLOSE);
+
+            break;
+        //  BEAK: TUI  
+          case 3:
+            translate(segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1]);
+            translate (0, -1.8);
+            fill(southIslandCol);
+            bezier (-.1,0,
+              -.07,-.5,
+              .07,-.5,
+              .1,0
+            );
+            bezier (-.1,0,
+              -.07,.5,
+              .07,.5,
+              .1,0
+            );
+            fill(beakTakahe);
+            bezier (-.1,0,
+              -.07,0-(diff*.3),
+              .07,0-(diff*.3),
+              .1,0
+            );
+            bezier (-.1,0,
+              -.07,0+(diff*.3),
+              .07,0+(diff*.3),
+              .1,0
+            );
+
+          break;
+            default: //debug texture
+            debugOut("Beak");
+        }
+    pop();
+  }
+
+  this.drawEyes = function(birdSpecies,positions,left_eye_pos,right_eye_pos,curEyeShift){
+    push();
+        switch(birdSpecies){
+          //  EYES: MOA  
+            case 0:
+
+            strokeWeight(0.03);
+            noFill();
+            stroke
+            for(let i = 0; i < 10; i++){
+              push();
+                stroke(stroke_color);
+                strokeWeight(0.15);
+                ellipse(left_eye_pos[0]-.8, left_eye_pos[1]+.6, 1-(i*.15), 0.63);
+                ellipse(right_eye_pos[0]+.8, right_eye_pos[1]+.6, 1-(i*.15), 0.63);
+              pop();  
+              push();
+                stroke(neutralCol);
+                strokeWeight(0.12);
+                ellipse(left_eye_pos[0]-.8, left_eye_pos[1]+.6, 0.7-(i*.16), 0.8);
+                ellipse(right_eye_pos[0]+.8, right_eye_pos[1]+.6, 0.7-(i*.16), 0.8);
+              pop();
+              
+            }
+            break;
+            case 1:
+          //  EYES: EAGLE
+          strokeWeight(0.03);
+          noFill();
+          stroke
+          for(let i = 0; i < 10; i++){
+            push();
+              stroke(stroke_color);
+              strokeWeight(0.15);
+              ellipse(left_eye_pos[0]-.1, left_eye_pos[1]+.5, .6-(i*.06), 0.3);
+              ellipse(right_eye_pos[0]+.1, right_eye_pos[1]+.5, .6-(i*.06), 0.3);
+            pop();  
+            push();
+              stroke(neutralCol);
+              strokeWeight(0.03);
+              ellipse(left_eye_pos[0]-.1, left_eye_pos[1]+.5, 0.3-(i*.08), 0.4);
+              ellipse(right_eye_pos[0]+.1, right_eye_pos[1]+.5, 0.3-(i*.08), 0.4);
+            pop();
+            
+          }
+            break;
+          //  EYES: Takahe  
+          case 2:
+            strokeWeight(0.03);
+            noFill();
+            stroke
+            for(let i = 0; i < 10; i++){
+              push();
+                stroke(wetForestCol);
+                strokeWeight(0.15);
+                ellipse(left_eye_pos[0]-.3, left_eye_pos[1]+.1, .3-(i*.06), 0.3);
+                ellipse(right_eye_pos[0]+.3, right_eye_pos[1]+.1, .3-(i*.06), 0.3);
+              pop();  
+              push();
+                stroke(neutralCol);
+                strokeWeight(0.03);
+                ellipse(left_eye_pos[0]-.3, left_eye_pos[1]+.1, 0.3-(i*.08), 0.4);
+                ellipse(right_eye_pos[0]+.3, right_eye_pos[1]+.1, 0.3-(i*.08), 0.4);
+              pop();
+              
+            }
+            break;
+          //  EYES: TUI  
+            case 3:
+              case 2:
+                strokeWeight(0.03);
+                noFill();
+                stroke
+                for(let i = 0; i < 10; i++){
+                  push();
+                    stroke(50);
+                    strokeWeight(0.15);
+                    ellipse(left_eye_pos[0]+.4, left_eye_pos[1]-.4, .1-(i*.006), 0.1);
+                    ellipse(right_eye_pos[0]-.4, right_eye_pos[1]-.4, .1-(i*.006), 0.1);
+                  pop();  
+                  push();
+                    stroke(neutralCol);
+                    strokeWeight(0.03);
+                    ellipse(left_eye_pos[0]+.45, left_eye_pos[1]-.45, 0.1-(i*.001), 0.02);
+                    ellipse(right_eye_pos[0]-.35, right_eye_pos[1]-.45, 0.1-(i*.001), 0.02);
+                  pop();
+                  
+                }
+
+            break;
+            default: //debug texture
+            debugOut("Eyes");
+          }
+    pop();
+  }
+
+
+  this.drawJazz = function(birdSpecies,positions,topLipMidY,btmLipMidY,diff){
+    push();
+    switch(birdSpecies){
+      //  JAZZ: MOA  
+        case 0:
+            // eyebrows
+            //fill( this.eyebrowColour);
+            stroke(stroke_color);
+            strokeWeight(0.04);
+      
+            this.draw_segment(positions.left_eyebrow, 0.1 + diff*.15);
+            this.draw_segment(positions.left_eyebrow, -0.1 + diff*.25);
+      
+            positions.right_eyebrow[2][1] += diff*.3;
+            this.draw_segment(positions.right_eyebrow, 0.1);
+            this.draw_segment(positions.right_eyebrow, -0.1);
+      
+            // draw the chin segment using points
+            fill(this.chinColour);
+            stroke(this.chinColour);
+            if (drawHuman == true){
+              this.draw_segment(positions.chin);
+            }
+            fill(bothIslandsCol);
+            stroke(dryForestCol);
+            strokeWeight(0.01);
+            
+      
+            if (drawHuman == true){
+              this.draw_segment(positions.nose_bridge);
+              this.draw_segment(positions.nose_tip);
+            }
+          break;
+          case 1:
+        //  JAZZ: EAGLE
+        stroke(northIslandCol);
+            strokeWeight(0.04);
+
+            positions.left_eyebrow[1][1] += diff*.3;
+            positions.left_eyebrow[3][1] -= diff*.3;
+            positions.left_eyebrow[4][1] += diff*.4;
+            positions.right_eyebrow[3][1] += diff*.3;
+            positions.right_eyebrow[1][1] -= diff*.3;
+            positions.right_eyebrow[0][1] += diff*.4;
+            this.draw_segment(positions.left_eyebrow, .8+0.1 + diff*.15);
+            positions.left_eyebrow[3][1] += .05;
+            this.draw_segment(positions.left_eyebrow, .8+-0.1 + diff*.25);
+
+            this.draw_segment(positions.right_eyebrow, .8+0.1 + diff*.15);
+            positions.right_eyebrow[3][1] += .05;
+            this.draw_segment(positions.right_eyebrow, .8+-0.1 + diff*.25);
+      
+            // draw the chin segment using points
+            fill(this.chinColour);
+            stroke(this.chinColour);
+            if (drawHuman == true){
+              this.draw_segment(positions.chin);
+            }
+            fill(bothIslandsCol);
+            stroke(dryForestCol);
+            strokeWeight(0.01);
+            
+      
+            if (drawHuman == true){
+              this.draw_segment(positions.nose_bridge);
+              this.draw_segment(positions.nose_tip);
+            }
+          break;
+          //  JAZZ: Takahe  
+          case 2:
+          break;
+        //  JAZZ: TUI  
+          case 3:
+            push();
+            scale(.5);
+            translate(0,-2.3);
+            positions.left_eyebrow[1][1] += diff*.3;
+            positions.left_eyebrow[3][1] -= diff*.3;
+            positions.left_eyebrow[4][1] += diff*.4;
+            positions.right_eyebrow[3][1] += diff*.3;
+            positions.right_eyebrow[1][1] -= diff*.3;
+            positions.right_eyebrow[0][1] += diff*.4;
+            this.draw_segment(positions.left_eyebrow, .8+0.1 + diff*.15);
+            positions.left_eyebrow[3][1] += .05;
+            this.draw_segment(positions.left_eyebrow, .8+-0.1 + diff*.25);
+
+            this.draw_segment(positions.right_eyebrow, .8+0.1 + diff*.15);
+            positions.right_eyebrow[3][1] += .05;
+            this.draw_segment(positions.right_eyebrow, .8+-0.1 + diff*.25);
+            pop();
           break;
           default: //debug texture
-
-          debugOut("Beak");
-  }
-}
-
-this.drawEyes = function(birdSpecies,positions,left_eye_pos,right_eye_pos,curEyeShift){
-  push();
-    strokeWeight(0.03);
-      noFill();
-      stroke
-      for(let i = 0; i < 10; i++){
-        push();
-          stroke(stroke_color);
-          strokeWeight(0.15);
-          ellipse(left_eye_pos[0], left_eye_pos[1], 1-(i*.1), 0.33);
-          ellipse(right_eye_pos[0], right_eye_pos[1], 1-(i*.1), 0.33);
-        pop();  
-        push();
-          stroke(neutralCol);
-          strokeWeight(0.06);
-          ellipse(left_eye_pos[0], left_eye_pos[1], 0.4-(i*.15), 0.5);
-          ellipse(right_eye_pos[0], right_eye_pos[1], 0.4-(i*.15), 0.5);
-        pop();
-        
-      }
-
-
-  pop();
-}
-
-
-this.drawJazz = function(birdSpecies,positions,topLipMidY,btmLipMidY,diff){
-        // eyebrows
-        fill( this.eyebrowColour);
-        stroke( this.eyebrowColour);
-        strokeWeight(0.04);
-  
-        this.draw_segment(positions.left_eyebrow, 0.1 + diff*.15);
-        this.draw_segment(positions.left_eyebrow, -0.1 + diff*.25);
-  
-        positions.right_eyebrow[2][1] += diff*.3;
-        this.draw_segment(positions.right_eyebrow, 0.1);
-        this.draw_segment(positions.right_eyebrow, -0.1);
-  
-        // draw the chin segment using points
-        fill(this.chinColour);
-        stroke(this.chinColour);
-        if (drawHuman == true){
-          this.draw_segment(positions.chin);
+          debugOut("Jazz");
         }
-        fill(bothIslandsCol);
-        stroke(dryForestCol);
-        strokeWeight(0.01);
-        this.draw_segment(positions.nose_bridge);
-  
-        if (drawHuman == true){
-          
-          this.draw_segment(positions.nose_tip);
-      }
+  pop();
 }
 
   // DRAW POSITION FUNCTIONS
@@ -210,7 +655,6 @@ this.drawJazz = function(birdSpecies,positions,topLipMidY,btmLipMidY,diff){
           let ny = segment[i+1][1];
           
           line(px, py+ y_mod, nx, ny + y_mod);
-          console.log(px)
          
         }
         else if(do_loop) {
@@ -246,7 +690,7 @@ this.drawJazz = function(birdSpecies,positions,topLipMidY,btmLipMidY,diff){
   this.setProperties = function(settings) {
     this.num_eyes = int(map(settings[0], 0, 100, 1, 2));
     this.eye_shift = map(settings[1], 0, 100, -2, 2);
-    this.mouth_size = map(settings[2], 0, 100, 0.5, 8);
+    this.mouth_size = map(settings[2], 0, 100, 0.5, 1.5);
     this.bird_species = map(settings[3],0,100,0,4);
   }
 
@@ -255,7 +699,7 @@ this.drawJazz = function(birdSpecies,positions,topLipMidY,btmLipMidY,diff){
     let settings = new Array(4);
     settings[0] = map(this.num_eyes, 1, 2, 0, 100);
     settings[1] = map(this.eye_shift, -2, 2, 0, 100);
-    settings[2] = map(this.mouth_size, 0.5, 8, 0, 100);
+    settings[2] = map(this.mouth_size, 0.5, 1.5, 0, 100);
     settings[3] = map(this.bird_species, 0, 4, 0, 100);
     return settings;
   }
