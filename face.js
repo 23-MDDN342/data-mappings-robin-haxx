@@ -3,18 +3,8 @@
  * face and is able to draw itself.
  */  
 
-// remove this or set to false to enable full program (load will be slower)
 var DEBUG_MODE = false;
-
-// this can be used to set the number of sliders to show
-var NUM_SLIDERS = 3;
-
-// other variables can be in here too
-// here's some examples for colors used
-
-
-
-const stroke_color = [95, 52, 8];
+var NUM_SLIDERS = 4;
 
 const northIslandCol = [60,60,40];
 const southIslandCol = [140,100,70];
@@ -23,9 +13,11 @@ const bothIslandsCol = [150,130,0];
 const dryForestCol =   [28, 156, 77];
 const wetForestCol =   [28, 109, 156];
 const supalpineCol =   [178, 46, 255];
-
 const allHabitatsCol = [250, 96, 252];
+
 const neutralCol =     [226, 234, 229];
+const beakColour = [200,180,140,200];
+const stroke_color = [95, 52, 8];
 
 const drawHuman = false;// draws human mouth and nose elements 
 
@@ -51,165 +43,159 @@ function Face() {
   this.num_eyes = 2;    // can be either 1 (cyclops) or 2 (two eyes)
   this.eye_shift = -1;   // range is -10 to 10
   this.mouth_size = 1;  // range is 0.5 to 8
+  this.bird_species = 0;
 
   this.chinColour =    neutralCol;
   this.lipColour =     neutralCol;
   this.eyebrowColour = neutralCol;
 
-  /*
-   * Draw the face with position lists that include:
-   *    chin, right_eye, left_eye, right_eyebrow, left_eyebrow
-   *    bottom_lip, top_lip, nose_tip, nose_bridge, 
-   */  
   this.draw = function(positions) {
-    console.log()
-    // head
+
     ellipseMode(CENTER);
-    stroke(stroke_color);
-    strokeWeight(.01);
-    noFill();
-    //fill(this.mainColour);
-    for (let i=0; i<50; i++){
-      strokeWeight(.1);
-      ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4-(i*.1));
-      push();
-      stroke(this.detailColour);
+
+    let birdSpecies = Math.floor(this.bird_species);
+    // Downgrading from the approach I took to project 2 to just draw whatever I want for the different birds -
+    // I think this is a more suitable coding pattern for the amount of form variation I'm thinking of.
+    // one object-oriented system is enough :]
+    switch(birdSpecies){
+      case 0: //moa
+
+      // HEAD SHAPE
+      stroke(stroke_color);
       strokeWeight(.01);
-      ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4-(i*.1));
-      pop();
-    }
-    noStroke();
-
-
-    // mouth
-    let largerMouth = this.mouth_size * 1.7;
-    let mouthInner = largerMouth * 0.9;
-    //ellipse(segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1], 1.36, 0.25 * this.mouth_size);
-    push();
-    translate(segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1]);
-    translate (-largerMouth *.5, 0);
-    let topLipMidY = positions.top_lip[4][1]
-    let btmLipMidY = positions.bottom_lip[4][1]
-    let diff = topLipMidY - btmLipMidY;
-
-    fill(200,200);
-
-    bezier (-1,0,
-      largerMouth*.2,-1.5,
-      largerMouth*.8,-1.5,
-      1+largerMouth,0
-    );
-
-    bezier (-1,0,
-      largerMouth*.2,1.5,
-      largerMouth*.8,1.5,
-      1+largerMouth,0
-    );
-    translate (0.5*(largerMouth - mouthInner), 0); // centers inner mouth region
-    fill(this.detailColour);
-    bezier( -1,0,
-
-      mouthInner*.3,topLipMidY + (1.5*diff),
-      mouthInner*.7,topLipMidY + (1.5*diff),
-            // math for difference between top and bottom lip y
-
-            1+mouthInner,0);
-
-    bezier( -1,0,
-
-      mouthInner*.3,0 - (diff),
-      mouthInner*.7,0 - (diff),
-            // math for difference between top and bottom lip y
-
-            1+mouthInner,0);
-    pop();
-    segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1];
-    //ellipse(segment_average(positions.bottom_lip)[0], segment_average(positions.bottom_lip)[1], 1.36, 0.25 * this.mouth_size);
-
-    // eyebrows
-    fill( this.eyebrowColour);
-    stroke( this.eyebrowColour);
-    strokeWeight(0.04);
-
-
-    this.draw_segment(positions.left_eyebrow, 0.1 + diff*.15);
-    this.draw_segment(positions.left_eyebrow, -0.1 + diff*.25);
-
-    positions.right_eyebrow[2][1] += diff*.3;
-    this.draw_segment(positions.right_eyebrow, 0.1);
-    this.draw_segment(positions.right_eyebrow, -0.1);
-
-    // draw the chin segment using points
-    fill(this.chinColour);
-    stroke(this.chinColour);
-    if (drawHuman == true){
-      this.draw_segment(positions.chin);
-    }
-    fill(bothIslandsCol);
-    stroke(dryForestCol);
-    strokeWeight(0.01);
-    this.draw_segment(positions.nose_bridge);
-
-    if (drawHuman == true){
-      
-      this.draw_segment(positions.nose_tip);
-  }
-    strokeWeight(0.03);
-
-    fill(this.lipColour);
-    stroke(this.lipColour);
-    if (drawHuman == true){
-      this.draw_segment(positions.top_lip);
-      this.draw_segment(positions.bottom_lip);
-  }
-
-    let left_eye_pos = segment_average(positions.left_eye);
-    let right_eye_pos = segment_average(positions.right_eye);
-
-    // eyes
-    //noStroke();
-    let curEyeShift = 0.04 * this.eye_shift;
-    if(this.num_eyes == 2) {
-      fill(this.detailColour);
       noFill();
-      stroke
-      for(let i = 0; i < 10; i++){
+      for (let i=0; i<50; i++){
+        strokeWeight(.1);
+        ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4-(i*.1));
         push();
-          stroke(stroke_color);
-          strokeWeight(0.15);
-          ellipse(left_eye_pos[0], left_eye_pos[1], 1-(i*.1), 0.33);
-          ellipse(right_eye_pos[0], right_eye_pos[1], 1-(i*.1), 0.33);
-        pop();  
-        push();
-          //stroke(stroke_color);
-          strokeWeight(0.06);
-          ellipse(left_eye_pos[0], left_eye_pos[1], 0.4-(i*.15), 0.5);
-          ellipse(right_eye_pos[0], right_eye_pos[1], 0.4-(i*.15), 0.5);
+        stroke(this.detailColour);
+        strokeWeight(.01);
+        ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4+-(i*.1));
         pop();
-        
+      };
+
+      // BEAK
+      let largerMouth = this.mouth_size * 1.7;
+      let mouthInner = largerMouth * 0.9;
+
+      push();
+        translate(segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1]);
+        translate (-largerMouth *.5, 0);
+
+        let topLipMidY = positions.top_lip[4][1]
+        let btmLipMidY = positions.bottom_lip[4][1]
+        let diff = topLipMidY - btmLipMidY;
+
+        noStroke();
+        fill(beakColour);
+        // Outer "beak"
+        bezier (-1,0,
+          largerMouth*.2,-1.5,
+          largerMouth*.8,-1.5,
+          1+largerMouth,0
+        );
+        bezier (-1,0,
+          largerMouth*.2,1.5,
+          largerMouth*.8,1.5,
+          1+largerMouth,0
+        );
+        translate (0.5*(largerMouth - mouthInner), 0); // centers inner mouth region
+        fill(this.detailColour);
+        // Inner "mouth"
+        bezier
+              ( -1,0,
+                mouthInner*.3,topLipMidY + (1.5*diff),
+                mouthInner*.7,topLipMidY + (1.5*diff),
+                1+mouthInner,0
+              );
+        bezier
+              ( -1,0,
+                mouthInner*.3,0 - (diff),
+                mouthInner*.7,0 - (diff),
+                1+mouthInner,0
+              );
+
+      pop();
+      // segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1];
+      //ellipse(segment_average(positions.bottom_lip)[0], segment_average(positions.bottom_lip)[1], 1.36, 0.25 * this.mouth_size);
+
+      // eyebrows
+      fill( this.eyebrowColour);
+      stroke( this.eyebrowColour);
+      strokeWeight(0.04);
+
+      this.draw_segment(positions.left_eyebrow, 0.1 + diff*.15);
+      this.draw_segment(positions.left_eyebrow, -0.1 + diff*.25);
+
+      positions.right_eyebrow[2][1] += diff*.3;
+      this.draw_segment(positions.right_eyebrow, 0.1);
+      this.draw_segment(positions.right_eyebrow, -0.1);
+
+      // draw the chin segment using points
+      fill(this.chinColour);
+      stroke(this.chinColour);
+      if (drawHuman == true){
+        this.draw_segment(positions.chin);
       }
-      
-      
+      fill(bothIslandsCol);
+      stroke(dryForestCol);
+      strokeWeight(0.01);
+      this.draw_segment(positions.nose_bridge);
 
-      // fill(this.mainColour);
-      // ellipse(left_eye_pos[0] + curEyeShift, left_eye_pos[1], 0.18);
-      // ellipse(right_eye_pos[0] + curEyeShift, right_eye_pos[1], 0.18);
+      if (drawHuman == true){
+        
+        this.draw_segment(positions.nose_tip);
     }
-    else {
-      let eyePosX = (left_eye_pos[0] + right_eye_pos[0]) / 2;
-      let eyePosY = (left_eye_pos[1] + right_eye_pos[1]) / 2;
+      strokeWeight(0.03);
 
-      fill(this.detailColour);
-       ellipse(eyePosX, eyePosY, 0.45, 0.27);
+      let left_eye_pos = segment_average(positions.left_eye);
+      let right_eye_pos = segment_average(positions.right_eye);
 
-      fill(this.mainColour);
-      ellipse(eyePosX - 0.1 + curEyeShift, eyePosY, 0.18);
+      // eyes
+      //noStroke();
+      let curEyeShift = 0.04 * this.eye_shift;
+      if(this.num_eyes == 2) {
+        fill(this.detailColour);
+        noFill();
+        stroke
+        for(let i = 0; i < 10; i++){
+          push();
+            stroke(stroke_color);
+            strokeWeight(0.15);
+            ellipse(left_eye_pos[0], left_eye_pos[1], 1-(i*.1), 0.33);
+            ellipse(right_eye_pos[0], right_eye_pos[1], 1-(i*.1), 0.33);
+          pop();  
+          push();
+            //stroke(stroke_color);
+            strokeWeight(0.06);
+            ellipse(left_eye_pos[0], left_eye_pos[1], 0.4-(i*.15), 0.5);
+            ellipse(right_eye_pos[0], right_eye_pos[1], 0.4-(i*.15), 0.5);
+          pop();
+          
+        }
 
-    }
-   // fill(0)
-   //ellipse(0,0, 0.5,0.5) center point
-   //rect(-2,-2,4.5,4) sizing debug 
+      }
+      else {
+        let eyePosX = (left_eye_pos[0] + right_eye_pos[0]) / 2;
+        let eyePosY = (left_eye_pos[1] + right_eye_pos[1]) / 2;
+
+        fill(this.detailColour);
+        ellipse(eyePosX, eyePosY, 0.45, 0.27);
+
+        fill(this.mainColour);
+        ellipse(eyePosX - 0.1 + curEyeShift, eyePosY, 0.18);
+
+      }
+    break;
+    default:
+    fill(0)
+    ellipse(0,0, 0.5,0.5);
+    rect(-2,-2,4.5,4); 
+    console.log('oops, no visual representation for this birdSpecies value!');
+  } // closes switch statement
+
   }
+
 
   // example of a function *inside* the face object.
   // this draws a segment, and do_loop will connect the ends if true
@@ -226,9 +212,7 @@ function Face() {
           
           line(px, py+ y_mod, nx, ny + y_mod);
           console.log(px)
-          
-
-          
+         
         }
         else if(do_loop) {
           let nx = segment[0][0];
@@ -257,20 +241,21 @@ function Face() {
     }
   };
 
-
   /* set internal properties based on list numbers 0-100 */
   this.setProperties = function(settings) {
     this.num_eyes = int(map(settings[0], 0, 100, 1, 2));
     this.eye_shift = map(settings[1], 0, 100, -2, 2);
     this.mouth_size = map(settings[2], 0, 100, 0.5, 8);
+    this.bird_species = map(settings[3],0,100,0,4);
   }
 
   /* get internal properties as list of numbers 0-100 */
   this.getProperties = function() {
-    let settings = new Array(3);
+    let settings = new Array(4);
     settings[0] = map(this.num_eyes, 1, 2, 0, 100);
     settings[1] = map(this.eye_shift, -2, 2, 0, 100);
     settings[2] = map(this.mouth_size, 0.5, 8, 0, 100);
+    settings[3] = map(this.bird_species, 0, 4, 0, 100);
     return settings;
   }
 }
