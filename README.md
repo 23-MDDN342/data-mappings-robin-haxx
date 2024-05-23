@@ -6,3 +6,5 @@ I've made the decision to break the code up to set up necessary draw settings an
 After implementing this I began to build out the drawing process for different birds. I have 4 now - Moa, Haasts eagle, Takahe and Tui, and while Ive had lots of ideas for now will focus on variation, refinement and ML capability for now.
 
 The bird species will be decided based on hair colour.
+
+I also implemented the vibrance slider

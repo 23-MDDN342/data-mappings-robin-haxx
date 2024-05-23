@@ -6,20 +6,7 @@
 var DEBUG_MODE = false;
 var NUM_SLIDERS = 4;
 
-const northIslandCol = [60,60,40];
-const southIslandCol = [140,100,70];
-const bothIslandsCol = [150,130,0];
 
-const dryForestCol =   [28, 156, 77];
-const wetForestCol =   [28, 109, 156];
-const supalpineCol =   [178, 46, 255];
-const allHabitatsCol = [250, 96, 252];
-
-const neutralCol =     [226, 234, 229];
-const beakColour = [200,180,140];
-const beakTakahe = [240,110,120];
-const stroke_color = [95, 52, 8];
-const beakColourAlpha = [...beakColour, 200]
 
 const drawHuman = false;// draws human mouth and nose elements 
 
@@ -30,18 +17,44 @@ function Face() {
   ellipseMode(CENTER);
   // these are state variables for a face
   // (your variables should be different!)
-  this.detailColour = dryForestCol;
-  this.mainColour = bothIslandsCol;
-  this.num_eyes = 2;    // can be either 1 (cyclops) or 2 (two eyes)
-  this.eye_shift = -1;   // range is -10 to 10
-  this.mouth_size = 1;  // range is 0.5 to 8
-  this.bird_species = 0;
+  this.vibrance = 0;    // colour lerp 0-255
+  this.colourBase = color(50,50,50);
 
-  this.chinColour =    neutralCol;
-  this.lipColour =     neutralCol;
-  this.eyebrowColour = neutralCol;
+
+
+  
+
+
+
+
+  this.detailColour = color(28, 156, 77);
+  this.mainColour = color(150,130,0);
+  
+  this.eye_open = 1;      // 0-1
+  this.mouth_size = 1;    // range is 0.5 to 2
+  this.bird_species = 0;  // 0-4
+  this.feather_ruffle = 0;// modifier 0-10
+
+  this.chinColour =    color(226, 234, 229);
+  this.lipColour =     color(226, 234, 229);
+  this.eyebrowColour = color(226, 234, 229);
 
   this.draw = function(positions) {
+
+    northIslandCol = lerpColor(color(60,60,40),this.colourBase, this.vibrance);
+    southIslandCol = lerpColor(color(140,100,70),this.colourBase, this.vibrance);
+    bothIslandsCol = lerpColor(color(150,130,0),this.colourBase, this.vibrance);
+
+    dryForestCol =   lerpColor(color(28, 156, 77),this.colourBase, this.vibrance);
+    wetForestCol =   lerpColor(color(28, 109, 156),this.colourBase, this.vibrance);
+    supalpineCol =   lerpColor(color(178, 46, 255),this.colourBase, this.vibrance);
+    allHabitatsCol = lerpColor(color(250, 96, 252),this.colourBase, this.vibrance);
+    
+    neutralCol =     lerpColor(color(226, 234, 229),this.colourBase, this.vibrance);
+    beakColour = lerpColor(color(200,180,140),this.colourBase, this.vibrance);
+    beakTakahe = lerpColor(color(240,110,120),this.colourBase, this.vibrance);
+    stroke_color = lerpColor(color(95, 52, 8),this.colourBase, this.vibrance);
+    beakColourAlpha = lerpColor(color(200,180,140, 200),this.colourBase, this.vibrance);
 
     let birdSpecies = Math.floor(this.bird_species);
     // Changed to a function-oriented drawing approach, this gives me a lot of variability options since I don't want as many shared properties as project 2.
@@ -51,15 +64,15 @@ function Face() {
     let btmLipMidY = positions.bottom_lip[4][1]
     let diff = topLipMidY - btmLipMidY;
 
-    let left_eye_pos = segment_average(positions.left_eye);
+    let left_eye_pos =  segment_average(positions.left_eye);
     let right_eye_pos = segment_average(positions.right_eye);
 
-    let curEyeShift = 0.04 * this.eye_shift;
+    let curEyeShift = 0.04 * this.eye_open;
 
       this.drawHead(birdSpecies, positions);
       this.drawBeak(birdSpecies, positions, topLipMidY,btmLipMidY,diff);
-      this.drawEyes(birdSpecies, positions,left_eye_pos,right_eye_pos);
-      this.drawJazz(birdSpecies, positions,topLipMidY,btmLipMidY,diff, curEyeShift)
+      this.drawEyes(birdSpecies, positions, left_eye_pos,right_eye_pos);
+      this.drawJazz(birdSpecies, positions, topLipMidY,btmLipMidY,diff, curEyeShift)
 
   }
 
@@ -93,20 +106,6 @@ function Face() {
               strokeWeight(.05);
               //ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4-(i*.1));
               beginShape();
-              curveVertex(-(i/25),-(i/25));
-              curveVertex(-(i/33.5),-(i/20));
-              curveVertex((i/33.5),-(i/20));
-              curveVertex(0,-(i/20));
-              curveVertex((i/25),-(i/25));
-              curveVertex((i/33.5),(i/50));
-              curveVertex(0,(i/20));
-              curveVertex(-(i/33.5),(i/50));
-              endShape(CLOSE);
-              push();
-                stroke(this.detailColour);
-                strokeWeight(.001);
-                //ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4+-(i*.1));
-                beginShape();
                 curveVertex(-(i/25),-(i/25));
                 curveVertex(-(i/33.5),-(i/20));
                 curveVertex((i/33.5),-(i/20));
@@ -114,7 +113,21 @@ function Face() {
                 curveVertex((i/25),-(i/25));
                 curveVertex((i/33.5),(i/50));
                 curveVertex(0,(i/20));
-                curveVertex(-(i/33.5),(i/50));  
+                curveVertex(-(i/33.5),(i/50));
+              endShape(CLOSE);
+              push();
+                stroke(this.detailColour);
+                strokeWeight(.001);
+                //ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4+-(i*.1));
+                beginShape();
+                  curveVertex(-(i/25),-(i/25));
+                  curveVertex(-(i/33.5),-(i/20));
+                  curveVertex((i/33.5),-(i/20));
+                  curveVertex(0,-(i/20));
+                  curveVertex((i/25),-(i/25));
+                  curveVertex((i/33.5),(i/50));
+                  curveVertex(0,(i/20));
+                  curveVertex(-(i/33.5),(i/50));  
                 endShape(CLOSE);
               pop();
             }
@@ -291,17 +304,17 @@ function Face() {
             strokeWeight(.05);
             
             beginShape();
-            curveVertex(-1,0);
-            curveVertex(-1,0);
-            curveVertex(-.5+(largerMouth*.1),-.1);
-            curveVertex((largerMouth*.5), .5);
-            curveVertex(.5+(largerMouth*.9), -.1);
-            curveVertex(1+largerMouth,0);
-            curveVertex(1+largerMouth,0);
-            curveVertex(.5+(largerMouth*.9), -.3-(diff*.7));
-            curveVertex((largerMouth*.5), .3-(diff*.7));
-            curveVertex(-.5+(largerMouth*.1),-.3-(diff*.7));
-            curveVertex(-1,0);
+              curveVertex(-1,0);
+              curveVertex(-1,0);
+              curveVertex(-.5+(largerMouth*.1),-.1);
+              curveVertex((largerMouth*.5), .5);
+              curveVertex(.5+(largerMouth*.9), -.1);
+              curveVertex(1+largerMouth,0);
+              curveVertex(1+largerMouth,0);
+              curveVertex(.5+(largerMouth*.9), -.3-(diff*.7));
+              curveVertex((largerMouth*.5), .3-(diff*.7));
+              curveVertex(-.5+(largerMouth*.1),-.3-(diff*.7));
+              curveVertex(-1,0);
             endShape(CLOSE);
 
             translate (0.5*(largerMouth - mouthInner), 0); // centers inner mouth region
@@ -688,19 +701,21 @@ function Face() {
 
   /* set internal properties based on list numbers 0-100 */
   this.setProperties = function(settings) {
-    this.num_eyes = int(map(settings[0], 0, 100, 1, 2));
-    this.eye_shift = map(settings[1], 0, 100, -2, 2);
+    this.vibrance = map(settings[0], 0, 100, 0, 0.5);
+    this.eye_open = map(settings[1], 0, 100, 0, 1);
     this.mouth_size = map(settings[2], 0, 100, 0.5, 1.5);
     this.bird_species = map(settings[3],0,100,0,4);
+    this.feather_ruffle = map(settings[4],0,100,0,10);
   }
 
   /* get internal properties as list of numbers 0-100 */
   this.getProperties = function() {
     let settings = new Array(4);
-    settings[0] = map(this.num_eyes, 1, 2, 0, 100);
-    settings[1] = map(this.eye_shift, -2, 2, 0, 100);
+    settings[0] = map(this.vibrance, 0, 0.5, 0, 100);
+    settings[1] = map(this.eye_open, 0, 1, 0, 100);
     settings[2] = map(this.mouth_size, 0.5, 1.5, 0, 100);
     settings[3] = map(this.bird_species, 0, 4, 0, 100);
+    settings[4] = map(this.feather_ruffle,0,10,0,100);
     return settings;
   }
 }
