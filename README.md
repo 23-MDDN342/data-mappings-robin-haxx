@@ -8,3 +8,5 @@ After implementing this I began to build out the drawing process for different b
 The bird species will be decided based on hair colour.
 
 I also implemented the vibrance slider
+
++ Oscillation! based on this tutorial by Patt Vira https://www.youtube.com/watch?v=atNUa7MdhYs
