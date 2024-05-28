@@ -49,7 +49,7 @@ function Face() {
   this.waves = [];
   
   for (let i=0; i < num; i++){
-    this.waves[i] = new Wave(i*32);
+    this.waves[i] = new Wave(i*32*(1+i*.5));
     }
 
   this.draw = function(positions) {
@@ -101,17 +101,18 @@ function Face() {
             noFill();
 
             for (let i=0; i<50; i++){
-              strokeWeight(.1);
+              strokeWeight(.03);
               ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4-(i*.1));
               push();
-                stroke(this.detailColour);
+                stroke(0);
                 strokeWeight(.01);
                 ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4+-(i*.1));
               pop();
             };   
             push();
-            stroke(lerpColor(northIslandCol, color(100,80,10), 50));
-            strokeWeight(.006);
+            //stroke(0,50);
+            stroke(lerpColor(this.mainColour, color(50,30,10), .9));
+            strokeWeight(.02);
             
 //call dispolay
 for(let i=0; i< num; i++){
@@ -326,7 +327,7 @@ pop();
             );
 
 
-            fill(this.detailColour);
+            fill(stroke_color);
             stroke(beakColourAlpha);
             strokeWeight(.05);
             

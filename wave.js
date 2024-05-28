@@ -4,12 +4,12 @@ class Wave {
       this.shift = shift;
     }
     display(){
-      for(let i=0; i <= 360; i+=10){
+      for(let i=0; i <= 360; i+=28){
         let x = map(i,0,360,-r,r);
         let amplitude = r * sqrt(1-pow((x/r), 2));
         let y = amplitude*sin(i + this.angle + this.shift);
-        for(let i=0; i<5; i++){
-        ellipse(x,y,.08*i,.08*i);
+        for(let i=0; i<12; i++){
+        ellipse(x,y,.09*i,.05*i);
       }
       }
     //  console.log("display");
