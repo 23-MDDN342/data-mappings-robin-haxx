@@ -21,6 +21,8 @@ function setup () {
   let r = random(100);
   main_canvas.parent('canvasContainer');
   frameRate(24 * buffersPerFrame);
+
+  
 }
 
 function mousePressed(){

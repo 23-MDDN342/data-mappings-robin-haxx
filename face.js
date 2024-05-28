@@ -6,9 +6,24 @@
 var DEBUG_MODE = false;
 var NUM_SLIDERS = 4;
 
+let r = 2;
+let w;
+let waves = []; let num = 10;
+
+
 
 
 const drawHuman = false;// draws human mouth and nose elements 
+
+
+
+
+function setup(){
+  angleMode(DEGREES);
+  
+}
+
+
 
 
 
@@ -19,13 +34,6 @@ function Face() {
   // (your variables should be different!)
   this.vibrance = 0;    // colour lerp 0-255
   this.colourBase = color(50,50,50);
-
-
-
-  
-
-
-
 
   this.detailColour = color(28, 156, 77);
   this.mainColour = color(150,130,0);
@@ -38,23 +46,27 @@ function Face() {
   this.chinColour =    color(226, 234, 229);
   this.lipColour =     color(226, 234, 229);
   this.eyebrowColour = color(226, 234, 229);
+  
+
+  this.w = new Wave();
+  
 
   this.draw = function(positions) {
 
-    northIslandCol = lerpColor(color(60,60,40),this.colourBase, this.vibrance);
-    southIslandCol = lerpColor(color(140,100,70),this.colourBase, this.vibrance);
-    bothIslandsCol = lerpColor(color(150,130,0),this.colourBase, this.vibrance);
+    northIslandCol = lerpColor(color(50,50,30),this.colourBase, this.vibrance);
+    southIslandCol = lerpColor(color(190,130,100),this.colourBase, this.vibrance);
+    bothIslandsCol = lerpColor(color(200,170,30),this.colourBase, this.vibrance);
 
-    dryForestCol =   lerpColor(color(28, 156, 77),this.colourBase, this.vibrance);
-    wetForestCol =   lerpColor(color(28, 109, 156),this.colourBase, this.vibrance);
-    supalpineCol =   lerpColor(color(178, 46, 255),this.colourBase, this.vibrance);
-    allHabitatsCol = lerpColor(color(250, 96, 252),this.colourBase, this.vibrance);
+    dryForestCol =   lerpColor(color(45, 210, 93),this.colourBase, this.vibrance);
+    wetForestCol =   lerpColor(color(40, 145, 210),this.colourBase, this.vibrance);
+    supalpineCol =   lerpColor(color(210, 65, 255),this.colourBase, this.vibrance);
+    allHabitatsCol = lerpColor(color(250, 130, 252),this.colourBase, this.vibrance);
     
     neutralCol =     lerpColor(color(226, 234, 229),this.colourBase, this.vibrance);
-    beakColour = lerpColor(color(200,180,140),this.colourBase, this.vibrance);
+    beakColour = lerpColor(color(220,190,160),this.colourBase, this.vibrance);
     beakTakahe = lerpColor(color(240,110,120),this.colourBase, this.vibrance);
     stroke_color = lerpColor(color(95, 52, 8),this.colourBase, this.vibrance);
-    beakColourAlpha = lerpColor(color(200,180,140, 200),this.colourBase, this.vibrance);
+    beakColourAlpha = lerpColor(color(220,190,160, 200),this.colourBase, this.vibrance);
 
     let birdSpecies = Math.floor(this.bird_species);
     // Changed to a function-oriented drawing approach, this gives me a lot of variability options since I don't want as many shared properties as project 2.
@@ -82,8 +94,8 @@ function Face() {
     push();
         switch(birdSpecies){
         //  HEAD: MOA
-          case 0:
-      
+          case 0: 
+
             stroke(stroke_color);
             noFill();
 
@@ -95,7 +107,19 @@ function Face() {
                 strokeWeight(.01);
                 ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4+-(i*.1));
               pop();
-            };      
+            };   
+            push();
+            stroke(0);
+            strokeWeight(.005);
+            
+//call dispolay
+this.w.display();
+this.w.move(positions);
+
+pop();
+
+            
+
           break;
         //  HEAD: EAGLE
           case 1:
