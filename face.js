@@ -46,10 +46,11 @@ function Face() {
   this.chinColour =    color(226, 234, 229);
   this.lipColour =     color(226, 234, 229);
   this.eyebrowColour = color(226, 234, 229);
+  this.waves = [];
   
-
-  this.w = new Wave();
-  
+  for (let i=0; i < num; i++){
+    this.waves[i] = new Wave(i*32);
+    }
 
   this.draw = function(positions) {
 
@@ -109,12 +110,14 @@ function Face() {
               pop();
             };   
             push();
-            stroke(0);
-            strokeWeight(.005);
+            stroke(lerpColor(northIslandCol, color(100,80,10), 50));
+            strokeWeight(.006);
             
 //call dispolay
-this.w.display();
-this.w.move(positions);
+for(let i=0; i< num; i++){
+this.waves[i].display();
+this.waves[i].move(positions);
+}
 
 pop();
 
