@@ -9,4 +9,27 @@ The bird species will be decided based on hair colour.
 
 I also implemented the vibrance slider
 
-+ Oscillation! based on this tutorial by Patt Vira https://www.youtube.com/watch?v=atNUa7MdhYs
+
+Okay! Trained on:
+
+SLIDER ONE
+<---More vibrant    Less vibrant----->
+<---Fem                     Masc----->
+
+SLIDER TWO
+<---Static feathers    "Ruffled"----->
+<---Angular face     Softer face----->
+
+SLIDER THREE
+<---small beak    big beak width----->
+<---pursed mouth      wide mouth----->
+
+SLIDER FOUR
+<--moa-----eagle----takahe----tui---->
+<--blond---brown----red-------black-->
+
++ Oscillation! based on this tutorial by Patt Vira<br>> 
+https://www.youtube.com/watch?v=atNUa7MdhYs
+
+"Official" bird mask ideas from DoC <br>
+https://www.doc.govt.nz/get-involved/conservation-activities/fun-things-to-make/
