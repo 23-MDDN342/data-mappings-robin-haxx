@@ -18,13 +18,13 @@ function Face() {
   // these are state variables for a face
   // (your variables should be different!)
   this.vibrance = 0;    // colour lerp 0-255
-  this.colourBase = color(50,50,50);
+  this.colourBase = color(0,0,0);
 
   this.detailColour = color(28, 156, 77);
   this.mainColour = color(150,130,0);
 
   this.islandCols = [color(50,50,30), color(190,130,100), color(200,170,30)];
-  this.habiCols   = [color(45, 210, 93), color(40, 145, 210), color(210, 65, 255), color(250, 130, 252)];
+  this.habiCols   = [color(25, 170, 53), color(20, 145, 200), color(210, 65, 255), color(250, 130, 252)];
   
   this.eye_open = 1;      // 0-1
   this.mouth_size = 1;    // range is 0.5 to 2
@@ -214,9 +214,11 @@ pop();
             }
             pop();
             push();
+            shearX(10);
+            scale(0.7);
             stroke(neutralCol);
-            strokeWeight(0.01);
-            translate(.9,.3);
+            strokeWeight(0.015);
+            translate(1.2,.3);
             rotate(-HALF_PI);
             for(let i = 0; i < .4; i+=.1){
                 for (let j=0; j < .8; j+=.1){ 
@@ -317,7 +319,6 @@ pop();
             .5+largerMouth,0
           );
           
-
           fill(this.detailColour);
           stroke(beakColourAlpha);
           strokeWeight(.05);
@@ -614,6 +615,17 @@ pop();
                 this.draw_segment(positions.right_eyebrow, .8+0.1 + diff*.15);
                 positions.right_eyebrow[3][1] += .05;
                 this.draw_segment(positions.right_eyebrow, .8+-0.1 + diff*.25);
+              pop();
+              push();
+              translate(0,3);
+              scale(0.4);
+             
+              stroke(255);
+              strokeWeight(0.1);
+              for(let i=0; i< this.ruffle; i++){
+                this.waves[i].displaySecond();
+                this.waves[i].move(positions);
+                }
               pop();
             pop();
           break;
