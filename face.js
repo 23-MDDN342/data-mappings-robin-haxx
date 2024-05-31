@@ -78,6 +78,7 @@ function Face() {
     let right_eye_pos = segment_average(positions.right_eye);
 
     let curEyeShift = 0.04 * this.eye_open;
+    scale(1.5); // last minute blanket scale
 
       this.drawHead(birdSpecies, diff, positions);
       this.drawBeak(birdSpecies, positions, topLipMidY,btmLipMidY,diff);
@@ -128,16 +129,16 @@ function Face() {
             noFill();
 
             for(let i = 0; i < 50; i++){
-              strokeWeight(.05);
+              strokeWeight(.07);
               beginShape();
-                curveVertex(-(i/25),-(i/25)); curveVertex(-(i/33.5),-(i/20)); curveVertex((i/33.5),-(i/20)); curveVertex(0,-(i/20)); curveVertex((i/25),-(i/25)); curveVertex((i/33.5),(i/50)); curveVertex(0,(i/20)); curveVertex(-(i/33.5),(i/50));
+              vertex(0,(i*.065)); vertex(0,(i*.065)); vertex(-(i*.015),(i*.04));  vertex(-(i*.03),(i*.055));  vertex(-(i*.035),(i*.02));  vertex(-(i*.045),(i*.015));  vertex(-(i*.035),0);  vertex(-(i*.025),-(i*.03)); vertex(-(i*.01),-(i*.04)); vertex((i*.01),-(i*.04)); vertex((i*.025),-(i*.03)); vertex((i*.035),0);  vertex((i*.045),(i*.015));  vertex((i*.035),(i*.02));  vertex((i*.03),(i*.055));  vertex((i*.015),(i*.04));  vertex(0,(i*.065));
               endShape(CLOSE);
 
               push();
                 stroke(northIslandCol);
-                strokeWeight(.01);
+                strokeWeight(.02);
                 beginShape();
-                  curveVertex(-(i/25),-(i/25)); curveVertex(-(i/33.5),-(i/20)); curveVertex((i/33.5),-(i/20)); curveVertex(0,-(i/20)); curveVertex((i/25),-(i/25)); curveVertex((i/33.5),(i/50));curveVertex(0,(i/20));curveVertex(-(i/33.5),(i/50));  
+                vertex(0,(i*.065)); vertex(0,(i*.065)); vertex(-(i*.015),(i*.04));  vertex(-(i*.03),(i*.055));  vertex(-(i*.035),(i*.02));  vertex(-(i*.045),(i*.015));  vertex(-(i*.035),0);  vertex(-(i*.025),-(i*.03)); vertex(-(i*.01),-(i*.04)); vertex((i*.01),-(i*.04)); vertex((i*.025),-(i*.03)); vertex((i*.035),0);  vertex((i*.045),(i*.015));  vertex((i*.035),(i*.02));  vertex((i*.03),(i*.055));  vertex((i*.015),(i*.04));  vertex(0,(i*.065));
                 endShape(CLOSE);
               pop();
               
@@ -201,27 +202,12 @@ function Face() {
               // This approach was very brute-force shape drawing and ate up a lot of lines of code
               // so I only kept the more readable line-by-line format where more interesting stuff is happening.
               // what would be nice would be able to "collapse" lines of code quickly by their tier of indentation
-                curveVertex(0,i*.05); 
-                curveVertex(0,i*.05); 
-                curveVertex(i*.0075,i*.045); 
-                curveVertex(i*.014,i*.045); 
-                curveVertex(i*.02,i*.04); 
-                curveVertex(i*.035,i*.0325); 
-                curveVertex(i*.0225,i*.010); 
-                curveVertex(i*.0125,i*.005); 
-                curveVertex(i*.008,-i*.007); 
-                curveVertex(-i*.008,-i*.007); 
-                curveVertex(-i*.0125,i*.005); 
-                curveVertex(-i*.0225,i*.010); 
-                curveVertex(-i*.035,i*.0325); 
-                curveVertex(-i*.02,i*.04); 
-                curveVertex(-i*.014,i*.045); 
-                curveVertex(-i*.0075,i*.045); 
-                curveVertex(0,i*.05);
+                curveVertex(0,i*.05);  curveVertex(0,i*.05);  curveVertex(i*.0075,i*.045);  curveVertex(i*.014,i*.045);  curveVertex(i*.02,i*.04);  curveVertex(i*.035,i*.0325);  curveVertex(i*.0225,i*.010);  curveVertex(i*.0125,i*.005);  curveVertex(i*.008,-i*.007);  curveVertex(-i*.008,-i*.007);  curveVertex(-i*.0125,i*.005);  curveVertex(-i*.0225,i*.010);  curveVertex(-i*.035,i*.0325);  curveVertex(-i*.02,i*.04);  curveVertex(-i*.014,i*.045);  curveVertex(-i*.0075,i*.045);  curveVertex(0,i*.05);
               endShape(CLOSE);
               push();
               stroke(wetForestCol);
               strokeWeight(0.007);
+                // leaving this shape expanded to show how vertices are affected by the mouth open-ness modifier
                 beginShape();
                 curveVertex(0,i*.05); 
                 curveVertex(0,i*.05); 
