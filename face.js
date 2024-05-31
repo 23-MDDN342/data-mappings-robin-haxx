@@ -15,16 +15,18 @@ function setup(){
 
 function Face() {
   ellipseMode(CENTER);
-  // these are state variables for a face
-  // (your variables should be different!)
-  this.vibrance = 0;    // colour lerp 0-255
-  this.colourBase = color(0,0,0);
+
+  // these are what I use to move "towards" a plainer colour as "vibrance" slider is adjusted
+  this.vibrance = 0;    // colour lerp 0-255. 0 is technically the most vibrant
+  this.colourBase1 = color(0,0,0);
+  this.colourBase2 = color(230,100,100); // lighter sample for takahe beak, stands out against darker feathers
+  this.colourBase2 = color(230,100,100);
 
   this.detailColour = color(28, 156, 77);
   this.mainColour = color(150,130,0);
 
-  this.islandCols = [color(50,50,30), color(190,130,100), color(200,170,30)];
-  this.habiCols   = [color(25, 170, 53), color(20, 145, 200), color(210, 65, 255), color(250, 130, 252)];
+  this.islandCols = [color(50,50,30), color(210,190,100), color(200,170,30)];
+  this.habiCols   = [color(25, 140, 53), color(20, 125, 200), color(210, 65, 255), color(250, 130, 252)];
   
   this.eye_open = 1;      // 0-1
   this.mouth_size = 1;    // range is 0.5 to 2
@@ -43,24 +45,27 @@ function Face() {
 
   this.draw = function(positions) {
 
-    northIslandCol =  lerpColor(this.islandCols[0],this.colourBase, this.vibrance);
-    southIslandCol =  lerpColor(this.islandCols[1],this.colourBase, this.vibrance);
-    bothIslandsCol =  lerpColor(this.islandCols[2],this.colourBase, this.vibrance);
+    northIslandCol =  lerpColor(this.islandCols[0],this.colourBase1, this.vibrance);
+    southIslandCol =  lerpColor(this.islandCols[1],this.colourBase1, this.vibrance);
+    bothIslandsCol =  lerpColor(this.islandCols[2],this.colourBase1, this.vibrance);
 
-    dryForestCol =    lerpColor(this.habiCols[0],this.colourBase, this.vibrance);
-    wetForestCol =    lerpColor(this.habiCols[1],this.colourBase, this.vibrance);
-    supalpineCol =    lerpColor(this.habiCols[2],this.colourBase, this.vibrance);
-    allHabitatsCol =  lerpColor(this.habiCols[3],this.colourBase, this.vibrance);
+    dryForestCol =    lerpColor(this.habiCols[0],this.colourBase1, this.vibrance);
+    wetForestCol =    lerpColor(this.habiCols[1],this.colourBase1, this.vibrance);
+    supalpineCol =    lerpColor(this.habiCols[2],this.colourBase1, this.vibrance);
+    allHabitatsCol =  lerpColor(this.habiCols[3],this.colourBase1, this.vibrance);
     
     //  this pallette is pretty disorganised so I didn't convert it into an array. 
     // (initial implementation of a "vibrance" slider)
-    neutralCol =      lerpColor(color(226, 234, 229),this.colourBase, this.vibrance);
-    beakColour =      lerpColor(color(220,190,160),this.colourBase, this.vibrance);
-    beakTakahe =      lerpColor(color(240,110,120),this.colourBase, this.vibrance);
-    beakColourAlpha = lerpColor(color(220,190,160, this.faceAlpha),this.colourBase, this.vibrance);
-    strokeCol =       lerpColor(color(95, 52, 8),this.colourBase, this.vibrance);
-    strokeColAlpha =  lerpColor(color(95, 52, 8, this.faceAlpha),this.colourBase, this.vibrance);
+    neutralCol =      lerpColor(color(226, 234, 229),this.colourBase1, this.vibrance);
+    beakColour =      lerpColor(color(220,190,160),this.colourBase1, this.vibrance);
+    beakTakahe =      lerpColor(color(240,110,120),this.colourBase2, this.vibrance);
+    beakColourAlpha = lerpColor(color(220,190,160, this.faceAlpha),this.colourBase1, this.vibrance);
+    strokeCol =       lerpColor(color(95, 52, 8),this.colourBase1, this.vibrance);
+    strokeColAlpha =  lerpColor(color(95, 52, 8, this.faceAlpha),this.colourBase1, this.vibrance);
 
+    // the "debug square" only appears if the species slider is all the way to the right - this won't happen in
+    // the face recognition process. (Opening the console will show that the default case for all the drawing 
+    // stages is being triggered)
     let birdSpecies = Math.floor(this.bird_species);
     // Changed to a function-oriented drawing approach, this gives me a lot of variability options since I don't want as many shared properties as project 2.
     // This also keeps a registry of object-scoped variables and which stage of drawing they're used in.
@@ -74,7 +79,7 @@ function Face() {
 
     let curEyeShift = 0.04 * this.eye_open;
 
-      this.drawHead(birdSpecies, positions);
+      this.drawHead(birdSpecies, diff, positions);
       this.drawBeak(birdSpecies, positions, topLipMidY,btmLipMidY,diff);
       this.drawEyes(birdSpecies, positions, left_eye_pos,right_eye_pos);
       this.drawJazz(birdSpecies, positions, topLipMidY,btmLipMidY,diff, curEyeShift)
@@ -85,7 +90,7 @@ function Face() {
 
 
   // HEAD SHAPES ###########################################################################################
-  this.drawHead = function(birdSpecies, positions){
+  this.drawHead = function(birdSpecies, diff, positions){
     push();
         switch(birdSpecies){
         //  HEAD: MOA --------------------------------------------------------------------------------------
@@ -98,7 +103,7 @@ function Face() {
               strokeWeight(.03);
               ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4-(i*.1));
               push();
-                stroke(0);
+                 stroke(this.colourBase1);
                 strokeWeight(.01);
                 ellipse(segment_average(positions.chin)[0], 0, 5- (i*.1), 4+-(i*.1));
               pop();
@@ -108,13 +113,13 @@ function Face() {
             stroke(lerpColor(this.mainColour, color(50,30,10), .9));
             strokeWeight(.015);
             
-// This is all that needs written in face.js draw loop for the wave animation
-for(let i=0; i< this.ruffle; i++){
-this.waves[i].display();
-this.waves[i].move(positions);
-}
+            // This is all that needs written in face.js draw loop for the wave animation
+            for(let i=0; i< this.ruffle; i++){
+            this.waves[i].display();
+            this.waves[i].move(positions);
+            }
 
-pop();      
+            pop();      
           break;
 
         //  HEAD: EAGLE -------------------------------------------------------------------------------------
@@ -129,8 +134,8 @@ pop();
               endShape(CLOSE);
 
               push();
-                stroke(this.detailColour);
-                strokeWeight(.001);
+                stroke(northIslandCol);
+                strokeWeight(.01);
                 beginShape();
                   curveVertex(-(i/25),-(i/25)); curveVertex(-(i/33.5),-(i/20)); curveVertex((i/33.5),-(i/20)); curveVertex(0,-(i/20)); curveVertex((i/25),-(i/25)); curveVertex((i/33.5),(i/50));curveVertex(0,(i/20));curveVertex(-(i/33.5),(i/50));  
                 endShape(CLOSE);
@@ -143,7 +148,7 @@ pop();
           case 2:
           stroke(wetForestCol);
           noFill();
-          strokeWeight(.03);
+          strokeWeight(.04);
           for(let i = 0; i < 60; i++){
             beginShape();
               curveVertex(0,.02*i); curveVertex(0,.02*i); curveVertex(-.025*i,.025*i); curveVertex(-.0375*i,0); curveVertex(-0.0175*i,-.0375*i); curveVertex(0.0175*i,-.0375*i); curveVertex(.0375*i,0); curveVertex(.025*i,.025*i); curveVertex(0,.02*i);
@@ -172,6 +177,19 @@ pop();
 
         //  HEAD: TUI  -------------------------------------------------------------------------------------
           case 3:
+            let beakMod = diff * .1;
+                        // Draws texture animation 
+                        push();
+                        translate(0,-0.4);
+                        scale(.4);
+                        noFill();
+                        stroke(wetForestCol);
+                        strokeWeight(.005);
+                        for(let i=0; i< this.ruffle; i++){
+                          this.waves[i].displaySecond();
+                          this.waves[i].move(positions);
+                        }
+                      pop();
             stroke(northIslandCol);
             noFill();
             strokeWeight(0.04);
@@ -179,72 +197,102 @@ pop();
             for(let i = 0; i < 60; i++){
               beginShape();
               // weird idea - storing bezier curve point values in an array, drawing points with a for loop. 
-              // would allow shapes to be altered with array transformations. not doing this here. lol.
-                curveVertex(0,i*.05); curveVertex(0,i*.05); curveVertex(i*.0125,i*.045); curveVertex(i*.02,i*.045); curveVertex(i*.025,i*.04); curveVertex(i*.045,i*.0325); curveVertex(i*.0325,i*.015); curveVertex(i*.0175,i*.005); curveVertex(i*.0125,-i*.005); curveVertex(-i*.0125,-i*.005); curveVertex(-i*.0175,i*.005); curveVertex(-i*.0325,i*.015); curveVertex(-i*.045,i*.0325); curveVertex(-i*.025,i*.04); curveVertex(-i*.02,i*.0375); curveVertex(-i*.0125,i*.045); curveVertex(0,i*.05);
+              // would allow shapes to be altered with array transformations. not doing this here. :p
+              // This approach was very brute-force shape drawing and ate up a lot of lines of code
+              // so I only kept the more readable line-by-line format where more interesting stuff is happening.
+              // what would be nice would be able to "collapse" lines of code quickly by their tier of indentation
+                curveVertex(0,i*.05); 
+                curveVertex(0,i*.05); 
+                curveVertex(i*.0075,i*.045); 
+                curveVertex(i*.014,i*.045); 
+                curveVertex(i*.02,i*.04); 
+                curveVertex(i*.035,i*.0325); 
+                curveVertex(i*.0225,i*.010); 
+                curveVertex(i*.0125,i*.005); 
+                curveVertex(i*.008,-i*.007); 
+                curveVertex(-i*.008,-i*.007); 
+                curveVertex(-i*.0125,i*.005); 
+                curveVertex(-i*.0225,i*.010); 
+                curveVertex(-i*.035,i*.0325); 
+                curveVertex(-i*.02,i*.04); 
+                curveVertex(-i*.014,i*.045); 
+                curveVertex(-i*.0075,i*.045); 
+                curveVertex(0,i*.05);
               endShape(CLOSE);
               push();
               stroke(wetForestCol);
-              strokeWeight(0.005);
+              strokeWeight(0.007);
                 beginShape();
-                  curveVertex(0,i*.05); curveVertex(0,i*.05); curveVertex(i*.0125,i*.045); curveVertex(i*.02,i*.045); curveVertex(i*.025,i*.04); curveVertex(i*.045,i*.0325); curveVertex(i*.0325,i*.015); curveVertex(i*.0175,i*.005); curveVertex(i*.0125,-i*.005); curveVertex(-i*.0125,-i*.005); curveVertex(-i*.0175,i*.005); curveVertex(-i*.0325,i*.015); curveVertex(-i*.045,i*.0325); curveVertex(-i*.025,i*.04); curveVertex(-i*.02,i*.0375); curveVertex(-i*.0125,i*.045); curveVertex(0,i*.05);
+                curveVertex(0,i*.05); 
+                curveVertex(0,i*.05); 
+                curveVertex(i*.0075,i*.045); 
+                curveVertex(i*.014,i*.045); 
+                curveVertex(i*.02+beakMod,i*.04); 
+                curveVertex(i*.035+beakMod,i*.0325); 
+                curveVertex(i*.0225+beakMod,i*.010); 
+                curveVertex(i*.0125+beakMod,i*.005); 
+                curveVertex(i*.008+beakMod,-i*.007); 
+                curveVertex(-i*.008-beakMod,-i*.007); 
+                curveVertex(-i*.0125-beakMod,i*.005); 
+                curveVertex(-i*.0225-beakMod,i*.010); 
+                curveVertex(-i*.035-beakMod,i*.0325); 
+                curveVertex(-i*.02-beakMod,i*.04); 
+                curveVertex(-i*.014,i*.045); 
+                curveVertex(-i*.0075,i*.045); 
+                curveVertex(0,i*.05);
                 endShape(CLOSE);
               pop();
 
               
             }
+            // left shoulder feathers. dont look as nice as the right
             push();
-            stroke(neutralCol);
-            strokeWeight(0.01);
-            translate(-.9,.3);
-            rotate(HALF_PI);
-            for(let i = 0; i < .4; i+=.1){
-                for (let j=0; j < .8; j+=.1){ 
-                translate(j*.07,0);
-                translate(0,j*.1);
-                push();
-                rotate(-TWO_PI);
-                rotate(PI * random(5,20)); 
-                  curve(-.5+i,-.5+j,
-                        -.15+i,0+j,
-                        .15+i,0+j,
-                        .5+i,-.5+j
-                  );
+            shearX(340);
+            scale(0.72);
+              stroke(neutralCol);
+              strokeWeight(0.02);
+              translate(-1.1,.3);
+              rotate(HALF_PI);
+              for(let i = 0; i < .4; i+=.1){
+                  for (let j=0; j < .8; j+=.1){ 
+                  translate(j*.07,j*.1);
+                  push();
+                    rotate(-TWO_PI);
+                    rotate(PI * random(5,20)); 
+                      curve(-.5+i,-.5+j,
+                            -.15+i,0+j,
+                            .15+i,0+j,
+                            .5+i,-.5+j
+                      );
                   pop();
+                }
               }
-            }
             pop();
+            // right shoulder 
             push();
-            shearX(10);
-            scale(0.7);
-            stroke(neutralCol);
-            strokeWeight(0.015);
-            translate(1.2,.3);
-            rotate(-HALF_PI);
-            for(let i = 0; i < .4; i+=.1){
-                for (let j=0; j < .8; j+=.1){ 
-                translate(-j*.07,0);
-                translate(0,j*.14);
-                push();
-                rotate(-TWO_PI);
-                rotate(PI * random(210,230)); 
-                  curve(-.5+i,-.5+j,
-                        -.15+i,0+j,
-                        .15+i,0+j,
-                        .5+i,-.5+j
-                  );
-                  pop();
+              shearX(10);
+              scale(0.7);
+              stroke(neutralCol);
+              strokeWeight(0.02);
+              translate(1.2,.3);
+              rotate(-HALF_PI);
+              for(let i = 0; i < .4; i+=.1){
+                  for (let j=0; j < .8; j+=.1){ 
+                  translate(-j*.07,0);
+                  translate(0,j*.14);
+                  push();
+                  rotate(-TWO_PI);
+                  rotate(PI * random(210,230)); 
+                    curve(-.5+i,-.5+j,
+                          -.15+i,0+j,
+                          .15+i,0+j,
+                          .5+i,-.5+j
+                    );
+                    pop();
+                }
               }
-            }
             pop();
-            push();
-            translate(0,1.2);
-            scale(.6);
-            strokeWeight(.005);
-            for(let i=0; i< this.ruffle; i++){
-              this.waves[i].displaySecond();
-              this.waves[i].move(positions);
-            }
-            pop();
+
           break;
 
           default: //debug texture
@@ -265,23 +313,26 @@ pop();
     
             translate(segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1]);
             translate (-largerMouth *.5, 0);
-
+            
             fill(beakColourAlpha);
             bezier (-1,0,
               largerMouth*.2,-1.5,
               largerMouth*.8,-1.5,
               1+largerMouth,0
             );
-            bezier (-1,0,
-              largerMouth*.2,1.5,
-              largerMouth*.8,1.5,
-              1+largerMouth,0
-            );
+            push();
+            //noStroke();
+              translate(0,-.005); //quick fix/ offset for weird 1 pixel anti alias issue
+              bezier (-1,0,
+                largerMouth*.2,1.5,
+                largerMouth*.8,1.5,
+                1+largerMouth,0
+              );
+            pop();
 
             fill(strokeCol);
-            stroke(beakColourAlpha);
+             stroke(this.colourBase1);
             strokeWeight(.05);
-            
             beginShape();
               curveVertex(-1,0);
               curveVertex(-1,0);
@@ -307,7 +358,8 @@ pop();
           push();
           translate(segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1]);
           translate (-largerMouth *.5, 0);
-          fill(beakColourAlpha);
+          stroke(this.colourBase1);
+          fill(southIslandCol);
           bezier (-.5,0,
             largerMouth*.2,-1.5,
             largerMouth*.8,-1.5,
@@ -319,8 +371,7 @@ pop();
             .5+largerMouth,0
           );
           
-          fill(this.detailColour);
-          stroke(beakColourAlpha);
+          fill(northIslandCol);
           strokeWeight(.05);
           
           beginShape();
@@ -367,8 +418,8 @@ pop();
               largerMouth*.8,.5,
               .5+largerMouth,0
             );
-            fill(this.detailColour);
-            stroke(beakColourAlpha);
+            fill(0);
+            stroke(lerpColor(beakTakahe, color(0,0,0), 0.2));
             strokeWeight(.05);
             translate(0,-1);
             beginShape();
@@ -398,15 +449,16 @@ pop();
             translate(segment_average(positions.top_lip)[0], segment_average(positions.top_lip)[1]);
             translate (0, -1.8);
             fill(southIslandCol);
-            bezier (-.1,0,
+            let beakMod = this.mouth_size * .1;
+            bezier (-.1-beakMod,0,
               -.07,-.5,
               .07,-.5,
-              .1,0
+              .1+beakMod,0
             );
-            bezier (-.1,0,
+            bezier (-.1-beakMod,0,
               -.07,.5,
               .07,.5,
-              .1,0
+              .1+beakMod,0
             );
             fill(beakTakahe);
             bezier (-.1,0,
@@ -480,7 +532,8 @@ pop();
             stroke
             for(let i = 0; i < 10; i++){
               push();
-                stroke(wetForestCol);
+                // easter egg: eye colour here changes with mouth size
+                stroke(lerpColor(wetForestCol, this.colourBase1, this.mouth_size-0.5));
                 strokeWeight(0.15);
                 ellipse(left_eye_pos[0]-.3, left_eye_pos[1]+.1, .3-(i*.06), 0.3);
                 ellipse(right_eye_pos[0]+.3, right_eye_pos[1]+.1, .3-(i*.06), 0.3);
@@ -500,7 +553,7 @@ pop();
                 noFill();
                 for(let i = 0; i < 10; i++){
                   push();
-                    stroke(0);
+                     stroke(this.colourBase1);
                     strokeWeight(0.15);
                     ellipse(left_eye_pos[0]+.4, left_eye_pos[1]-.4, .1-(i*.006), 0.1);
                     ellipse(right_eye_pos[0]-.4, right_eye_pos[1]-.4, .1-(i*.006), 0.1);
@@ -557,21 +610,35 @@ pop();
           break;
           case 1:
         //  JAZZ: EAGLE ---------------------------------------------------------------------------------
-        stroke(northIslandCol);
-            strokeWeight(0.04);
+          push();
+          stroke(southIslandCol);
+            strokeWeight(0.02);
+
 
             positions.left_eyebrow[1][1] += diff*.3;
             positions.left_eyebrow[3][1] -= diff*.3;
-            positions.left_eyebrow[4][1] += diff*.4;
+            positions.left_eyebrow[4][1] -= diff*.4;
             positions.right_eyebrow[3][1] += diff*.3;
             positions.right_eyebrow[1][1] -= diff*.3;
-            positions.right_eyebrow[0][1] += diff*.4;
+            positions.right_eyebrow[0][1] -= diff*.4;
             this.draw_segment(positions.left_eyebrow, .8+0.1 + diff*.15);
             positions.left_eyebrow[3][1] += .05;
             this.draw_segment(positions.left_eyebrow, .8+-0.1 + diff*.25);
             this.draw_segment(positions.right_eyebrow, .8+0.1 + diff*.15);
             positions.right_eyebrow[3][1] += .05;
             this.draw_segment(positions.right_eyebrow, .8+-0.1 + diff*.25);
+
+            fill(northIslandCol);
+            beginShape();
+              curveVertex(0,1.7);
+              curveVertex(0,1.7);
+              curveVertex(-.5,1);
+              curveVertex(-.5,-.7);
+              curveVertex(0,-1);
+              curveVertex(.5, -.7);
+              curveVertex(.5,1);
+            
+            endShape(CLOSE);
       
             // draws some human features if drawHuman variable in file head is true
             fill(this.chinColour);
@@ -586,6 +653,7 @@ pop();
               this.draw_segment(positions.nose_bridge);
               this.draw_segment(positions.nose_tip);
             }
+            pop();
           break;
 
           //  JAZZ: Takahe  -------------------------------------------------------------------------------
@@ -619,12 +687,12 @@ pop();
               push();
               translate(0,3);
               scale(0.4);
-             
+              noFill();
               stroke(255);
-              strokeWeight(0.1);
-              for(let i=0; i< this.ruffle; i++){
-                this.waves[i].displaySecond();
-                this.waves[i].move(positions);
+              strokeWeight(2);
+              for(let i=0; i< 2; i++){
+                this.waves[i].displayThird();
+                //this.waves[i].move(positions);
                 }
               pop();
             pop();
@@ -680,17 +748,17 @@ pop();
 
   /* set internal properties based on list numbers 0-100 */
   this.setProperties = function(settings) {
-    this.vibrance = map(settings[0], 0, 100, 0, 0.5);
+    this.vibrance = map(settings[0], 0, 100, 0, 0.3);
     this.ruffle = map(settings[1], 0, 100, 0, num);
     this.mouth_size = map(settings[2], 0, 100, 0.5, 1.5);
-    this.bird_species = map(settings[3],0,100,0,4);
+    this.bird_species = map(settings[3],0,100,0,4); //changing the 4's to 3.99 will stop the debug 
     this.feather_ruffle = map(settings[4],0,100,0,10);
   }
 
   /* get internal properties as list of numbers 0-100 */
   this.getProperties = function() {
     let settings = new Array(4);
-    settings[0] = map(this.vibrance, 0, 0.5, 0, 100);
+    settings[0] = map(this.vibrance, 0, 0.3, 0, 100);
     settings[1] = map(this.ruffle, 0, num, 0, 100);
     settings[2] = map(this.mouth_size, 0.5, 1.5, 0, 100);
     settings[3] = map(this.bird_species, 0, 4, 0, 100);

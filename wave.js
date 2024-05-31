@@ -1,3 +1,6 @@
+// Wave oscillation built with this tutorial by Patt Vira:
+// https://www.youtube.com/watch?v=atNUa7MdhYs
+// Potentially a really great tool for shape distribution and animation
 class Wave {
     constructor(shift){
       this.angle = 0;
@@ -23,6 +26,19 @@ class Wave {
         let y = amplitude*sin(i + this.angle + this.shift);
         for(let i=0; i<30; i++){
         ellipse(x,y,.09*i,.05*i);
+      }
+      }
+    //  console.log("display");
+  
+    }
+    //smaller
+    displayThird(){
+      for(let i=0; i <= 360; i+=120){
+        let x = map(i,0,360,-r*.2,r*.2);
+        let amplitude = r * sqrt(1-pow((x/r), 2));
+        let y = amplitude*sin(i + this.angle + this.shift)*.1;
+        for(let i=0; i<16; i++){
+        ellipse(x,y,.04*i,.09*i);
       }
       }
     //  console.log("display");

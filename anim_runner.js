@@ -6,21 +6,41 @@ const debugZoomScale = 0.5;
 // this can be modified after we discuss in lecture
 const buffersPerFrame = 1;
 
+
+
 // probably best not to modify anything below this line
-const frameMax = 24;
+const frameMax = 80;
 let recording = false;
 let gifRecorder = null;
 let debugZoom = false;
 let debugView = false;
 let stickFrame = 0;
+let img;
+
+let darker; 
+let white; 
+
+let testRegion;
 
 // *note: canvasWidth and canvasHeight will be defined before this script runs)
+
+
+
 
 function setup () {
   let main_canvas = createCanvas(canvasWidth,canvasHeight);
   let r = random(100);
   main_canvas.parent('canvasContainer');
   frameRate(24 * buffersPerFrame);
+
+  darker =  color("#3c1b4f"); //monochrome colour to lerp with white.
+  white  =  color("#ffffff");
+
+	// let testRegion = new TextureGrid(
+	// 	0,0, 	// x and y position
+	// 	width/6, height/4,				// region width and height
+	// 	darker, 5, white, darker		// stroke, noise detail level, primary and secondary colour
+	// );
   
 }
 
@@ -28,17 +48,21 @@ function mousePressed(){
 }
 
 function draw () {
+
+
   let animation_max_frames = frameMax * buffersPerFrame;
   let sticky_max_frames = animation_max_frames + stickFrame;
   let cur_frame = frameCount % sticky_max_frames;
   if (cur_frame >= animation_max_frames) {
     cur_frame = 0;
   }
-  let cur_frac = map(cur_frame, 0, animation_max_frames, 0, 1);
+  const cur_frac = map(cur_frame, 0, animation_max_frames, 0, 1);
 
-  const unitsOnField = 65;
+  const unitsOnField = 65;//THIS 'ERE COULD DO WITH A MORE ACCESSIBLE SCALABLE VARIABLE IN DRAW_ONE_FRAME
   const unitSize = width/unitsOnField;
   const spacing = width / unitsOnField ;
+
+
 
   background(debugZoomBackground);
 
@@ -50,7 +74,8 @@ function draw () {
     translate(0.5 * -width, 0.5 * -height);    
   }
 
-  draw_one_frame(cur_frac);
+  draw_one_frame(cur_frac,unitsOnField,unitSize,spacing);
+  
 
   pop();
 
@@ -99,20 +124,14 @@ function keyTyped() {
 }
 
 
+
 class TextureGrid {
-  constructor(x,y,w,h,
-    lowerSqW,lowerSqH,higherSqW,higherSqH,
-    strokeClr,noiseDetail,primary,secondary,
-    cur_frac,unitsOnField,unitSize,spacing) {
+  constructor(x,y,w,h,strokeClr,noiseDetail,primary,secondary,cur_frac,unitsOnField,unitSize,spacing) {
 
       this.x = x;
       this.y = y;
       this.w = w;
       this.h = h;
-      this.lowerSqW = lowerSqW;
-      this.lowerSqH = lowerSqH;
-      this.higherSqW = higherSqW;
-      this.higherSqH = higherSqH;
       this.strokeClr = strokeClr;
       this.noiseDetail = noiseDetail;
       this.primary = primary;
@@ -120,16 +139,16 @@ class TextureGrid {
       
   }
 
-  noise(cur_frac){
+  // noise(cur_frac){
   
-      this.primaryNoise = getNoiseValue(this.x,this.y,cur_frac,"pNoise",0,1,pNoiseDetail);
-      this.secondaryNoise = getNoiseValue(this.x,this.y,cur_frac,"sNoise",0,1,sNoiseDetail);
+  //     this.primaryNoise = getNoiseValue(this.x,this.y,cur_frac,"pNoise",0,1,pNoiseDetail);
+  //     this.primaryNoise = getNoiseValue(this.x,this.y,cur_frac,"sNoise",0,1,sNoiseDetail);
 
-  // potentially able to change on the fly with code such as:
-  // let chaoticNoise = getNoiseValue(this.x,this.y,cur_frac,"cNoise",0,1,2);
-  // shapeOne.noise.secondaryNoise = chaoticNoise
+  //  potentially able to change on the fly with code such as:
+  //  let chaoticNoise = getNoiseValue(this.x,this.y,cur_frac,"cNoise",0,1,2);
+  //  shapeOne.noise.secondaryNoise = chaoticNoise
 
-  }
+  // }
 
   renderRegion(cur_frac,unitsOnField,unitSize,spacing){
 
@@ -151,21 +170,21 @@ class TextureGrid {
               {
                   push();
                   noStroke();
-                  fill(255);
-                  rect(spacing*i,(spacing*j)-(unitSize/4),  cur_frac*this.lowerSqW, cur_frac*this.lowerSqH);
+                  fill(color(212, 188, 174));
+                  rect(spacing*i,(spacing*j)-(unitSize/4),  (unitSize*4*cur_frac)-(unitSize/2), unitSize/2);
                   pop();
-                  rect(spacing*i,spacing*j,  cur_frac*this.higherSqW, cur_frac*this.higherSqH);
+                  rect(spacing*i,spacing*j, unitSize/2, (unitSize*2*noiseGen)+unitSize);
               }
               else
               {
                   push();
                   noStroke();
-                  fill(255);
-                  rect(spacing*i,(spacing*j)-(unitSize/4), zero_to_zero*this.sqW, zero_to_zero*this.sqH);
+                  fill(color(212, 188, 174));
+                  rect(spacing*i,(spacing*j)-(unitSize/4), (unitSize*4*zero_to_zero)-(unitSize/2), unitSize/2);
                   pop();
                   push();
-                  
-                  rect(spacing*i,spacing*j, zero_to_zero*this.sqW, zero_to_zero*this.sqH);
+                  //fill(255);
+                  rect(spacing*i,spacing*j, unitSize/2, (unitSize*2*noiseGen)+unitSize);
                   pop();   
               }
           
@@ -174,6 +193,9 @@ class TextureGrid {
       
 
   }
+
+
+
 
 
 }
